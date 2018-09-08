@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--mybatis的主配置文件-->
+<configuration>
+    <properties resource="jdbcConfig.properties">
+    </properties>
+    <!--使用typeAliases配置别名，它只能配置domain中类的别名 -->
+    <typeAliases>
+        <!--typeAlias用于配置别名。type属性指定的是实体类全限定类名。alias属性指定别名，当指定了别名就再区分大小写 -->
+        <!--配置之后 UserDao.xml文件里的parameterType="com.mikro.domain.User" 可以写为user-->
+        <!--<typeAlias type="com.mikro.domain.User" alias="user"></typeAlias>-->
+
+        <!-- 用于指定要配置别名的包，当指定之后，该包下的实体类都会注册别名，并且类名就是别名，不再区分大小写-->
+        <!--把com.itheima.domain里面所有的类都注册别名 别名就是这类名称-->
+        <!--<package name="com.mikro.domain"></package>-->
+    </typeAliases>
+    <!--配置环境-->
+    <environments default="mysql">
+        <!--配置mysql环境-->
+        <environment id="mysql">
+            <!--配置事务类型-->
+            <transactionManager type="JDBC"></transactionManager>
+            <!--配置数据源（连接池）-->
+
+            <dataSource type="POOLED">
+                <!--配置连接数据库的4个基本信息-->
+                <property name="driver" value="${jdbc.driver}"></property>
+                <property name="url" value="${jdbc.url}"></property>
+                <property name="username" value="${jdbc.username}"></property>
+                <property name="password" value="${jdbc.password}"></property>
+
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--指定映射配置文件的位置 映射配置文件是指的每个Dao独立的配置文件-->
+<mappers>
+    <mapper resource="com/mikro/dao/UserDao.xml"></mapper>
+    <!--用于指定dao接口所在的包-->
+    <!--指定之后就需要再写resource或者class了-->
+    <!--<package name="com.mikro.dao"></package>-->
+</mappers>
+    <!--使用注解配置-->
+    <!--注意事项：删掉UserDao.xml文件 并且在UserDao接口中使用注解然后写上sql语句-->
+    <!--<mappers>-->
+        <!--<mapper class="com.mikro.dao.UserDao"/>-->
+    <!--</mappers>-->
+</configuration>

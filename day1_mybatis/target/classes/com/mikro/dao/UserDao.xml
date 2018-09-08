@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Mapper约束-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.mikro.dao.UserDao">
+    <!--Dao的映射文件-->
+
+<!--数据库列名和实体类属性名对应不上：-->
+    <!--配置查询结果的数据库列名和对应的实体类（User类）的关系-->
+    <!--使用：resultType（返回值类型）="com.mikro.domain.User"改为 resultMap id="usmap" -->
+    <!--id:随便起 一个标识   type：对应的实体类类型-->
+    <resultMap id="usmap" type="com.mikro.domain.User">
+        <!--主键字段的对应-->
+        <!--property:实体类的属性名称(现在假如实体类的id 为Integer userId) column:数据库的列名称 两个一一对应-->
+        <id property="userid" column="id"></id>
+        <!--非主键字段的对应-->
+        <result property="userName" column="username"></result>
+    </resultMap>
+
+
+<!--配置查询所有-->
+    <!--id=这个Dao的方法名称 resultType:封装到哪个实体类中-->
+    <select id="findAll" resultType="com.mikro.domain.User">
+--     sql语句
+        SELECT * from user;
+    </select>
+
+    <insert id="save" parameterType="com.mikro.domain.User">
+--         keyProperty(id属性名称 对应实体类(User类)) keyColumn(id列名 对应表 )
+    <selectKey keyProperty="id" keyColumn="id" resultType="Integer" order="AFTER">
+        select last_insert_id();
+    </selectKey>
+        insert into user(username,birthday,sex,address)values(#{username},#{birthday},#{sex},#{address});
+    </insert>
+
+
+    <update id="update" parameterType="com.mikro.domain.User">
+        update user set username=#{username},birthday=#{birthday},sex=#{sex},address=#{address} where id=49;
+    </update>
+
+    <delete id="delete" parameterType="String">
+        DELETE FROM user where username=#{username}
+    </delete>
+
+    <select id="findByid" parameterType="Integer" resultType="com.mikro.domain.User">
+        SELECT * from user where id=#{id}
+    </select>
+
+    <select id="findByname" parameterType="String" resultType="com.mikro.domain.User">
+        SELECT * from user where username LIKE #{username}
+    </select>
+
+    <select id="total" parameterType="String" resultType="Integer">
+        select count(*) from user where username LIKE #{username}
+    </select>
+</mapper>
